@@ -1,0 +1,7 @@
+server:
+  tokio:
+    host: 192.168.178.10
+    key_file: .ssh/test.key
+  madrid:
+    host: 192.168.178.5
+    key_file: .ssh/test2.key

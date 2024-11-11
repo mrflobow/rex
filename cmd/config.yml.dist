@@ -1,0 +1,9 @@
+server:
+  myserver:
+    host: 192.168.178.10
+    key_file: ~/.ssh/test.key
+    user: user1
+  myserver2:
+    host: myhostnamme.com
+    key_file: ~/.ssh/test.key
+    user: user2
