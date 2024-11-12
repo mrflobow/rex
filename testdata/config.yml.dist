@@ -1,18 +1,20 @@
 server:
-  tokio:
-    host: 192.168.178.10
-    key_file: .ssh/test.key
-  madrid:
-    host: 192.168.178.5
-    key_file: .ssh/test2.key
+  test1:
+    host: testhost
+    key_file: ~/.ssh/testhost.key
+    user: testuser
+  test2:
+    host: testhost2
+    key_file: ~/.ssh/testhost2.key
+    user: testuser
 
 groups:
   lab:
-    - myserver
-    - myserver2
-    
+    - test1
+    - test2
+
 templates:
   update:
-    cmd: sudo apt-get update && time sudo apt-get dist-upgrade
+    cmd: sudo apt-get dist-upgrade -y
   hello_world:
-    cmd: echo "This ${{0}} ${{1}} ${{2}} test"
+    cmd: echo "hello ${{0}} ${{1}} world"
