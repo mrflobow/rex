@@ -5,3 +5,9 @@ serverfatfingers:
   madrid:
     host: 192.168.178.5
     key_file: .ssh/test2.key
+
+templates:
+  update:
+    cmd: sudo apt-get update && time sudo apt-get dist-upgrade
+  hello_world:
+    cmd: echo "hello ${{0}} ${{1}} world"

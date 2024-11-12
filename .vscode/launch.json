@@ -11,7 +11,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${fileDirname}",
-            "args": ["-server", "madrid","ls","-la"]
+            "args": ["-server", "madrid",":update"]
         }
     ]
 }

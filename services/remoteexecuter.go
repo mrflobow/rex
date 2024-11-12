@@ -34,7 +34,23 @@ func (r *RemoteExecutor) ExecuteCommand(config *models.Config, server string, ar
 	}
 
 	defer client.Close()
-	cmd := strings.Join(args, " ")
+
+	var cmd string
+
+	if len(args) > 0 && strings.HasPrefix(args[0], ":") {
+		prefix := args[0]
+		template := prefix[1:]
+		parser := CommandParser{config: config}
+		subArgs := args[1:]
+		cmd, err = parser.ParseCommand(template, subArgs)
+
+		if err != nil {
+			return nil, err
+		}
+
+	} else {
+		cmd = strings.Join(args, " ")
+	}
 
 	out, err := client.Run(cmd)
 

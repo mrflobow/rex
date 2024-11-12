@@ -7,3 +7,9 @@ server:
     host: myhostnamme.com
     key_file: ~/.ssh/test.key
     user: user2
+
+templates:
+  update:
+    cmd: sudo apt-get update -y && sudo apt-get dist-upgrade -y
+  hello_world:
+    cmd: echo "hello ${{0}} ${{1}} world"
