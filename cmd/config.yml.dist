@@ -8,6 +8,11 @@ server:
     key_file: ~/.ssh/test.key
     user: user2
 
+groups:
+  lab:
+    - myserver
+    - myserver2
+
 templates:
   update:
     cmd: sudo apt-get update -y && sudo apt-get dist-upgrade -y

@@ -6,6 +6,11 @@ server:
     host: 192.168.178.5
     key_file: .ssh/test2.key
 
+groups:
+  lab:
+    - myserver
+    - myserver2
+    
 templates:
   update:
     cmd: sudo apt-get update && time sudo apt-get dist-upgrade

@@ -15,8 +15,8 @@ func TestConnectionFailed(t *testing.T) {
 	}
 
 	args := []string{"ls"}
-	rex := RemoteExecutor{}
-	if _, err := rex.ExecuteCommand(&config, "testserver", args); err == nil {
+	rex := RemoteExecutor{Config: &config}
+	if _, err := rex.ExecuteCommand("testserver", args); err == nil {
 		t.Fatal("Expected connection error")
 	}
 

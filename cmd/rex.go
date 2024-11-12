@@ -9,10 +9,11 @@ import (
 )
 
 func main() {
-	serverNamePtr := flag.String("server", "", "s")
+	serverNamePtr := flag.String("s", "", "Server to use")
+	grpNamePtr := flag.String("g", "", "Group to use")
 	flag.Parse()
 
-	fmt.Println("Remote Execution Automator")
+	log.Println("Remote Execution Automator")
 	configLoader := services.ConfigLoader{}
 	config, err := configLoader.LoadConfig("config.yml")
 
@@ -20,16 +21,28 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Server: %v \n", *serverNamePtr)
-	fmt.Println("Args: ", flag.Args())
+	log.Println("Config loaded - OK")
 
-	exec := services.RemoteExecutor{}
-	out, err := exec.ExecuteCommand(config, *serverNamePtr, flag.Args())
-
-	if err != nil {
-		log.Fatal(err)
+	if *serverNamePtr != "" && *grpNamePtr != "" {
+		log.Fatal("Please choose either server (-s) or Group (-g) option")
 	}
 
-	println(string(out.Data))
+	exec := services.RemoteExecutor{Config: config}
+
+	if *serverNamePtr != "" {
+
+		log.Printf("Executing on %v", *serverNamePtr)
+		out, err := exec.ExecuteCommand(*serverNamePtr, flag.Args())
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Println(string(out.Data))
+	}
+
+	if *grpNamePtr != "" {
+		exec.MultiExec(*grpNamePtr, flag.Args())
+	}
 
 }
