@@ -4,11 +4,37 @@ Rex is a handy tool to automate the remote execution of commands over SSH.
 It offers single host execution or group execution.
 After successfull execution it will return an output.
 
-An example config can be found in the repo at cmd/config.yml.dist. 
-Please copy it and rename it to ~/.rex/config.yml. 
+An example config can be found below.
 
-By default the program expects the config to be in the ~/.rex/config.yml. The path can be modified with -c flag.
+By default the program expects the config to be in the HOME_FOLDER/.rex/config.yml. The path can be modified with -c flag.
 
+
+## Sample Config
+
+```yml
+server:
+  myserver:
+    host: 192.168.178.10
+    key_file: ~/.ssh/test.key
+    user: user1
+  myserver2:
+    host: myhostnamme.com
+    key_file: ~/.ssh/test.key
+    user: user2
+
+groups:
+  lab:
+    - myserver
+    - myserver2
+
+templates:
+  update:
+    cmd: sudo apt-get update -y && sudo apt-get dist-upgrade -y
+  hello_world:
+    cmd: echo "hello ${{0}} ${{1}} world"
+```
+
+Save this config under your HOME_FOLDER/.rex/config.yml
 
 ## Single and Group Command Execution
 
