@@ -16,7 +16,7 @@ func TestConnectionFailed(t *testing.T) {
 	}
 
 	args := []string{"ls"}
-	rex := RemoteExecutor{Config: &config}
+	rex := NewRemoteExecutor(&config)
 	if _, err := rex.ExecuteCommand("testserver", args); err == nil {
 		t.Fatal("Expected connection error")
 	}
@@ -31,7 +31,7 @@ func TestSingleCommandExec(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	rex := RemoteExecutor{Config: config}
+	rex := NewRemoteExecutor(config)
 	args := []string{"echo \"hello world\""}
 
 	out, err := rex.ExecuteCommand("test1", args)

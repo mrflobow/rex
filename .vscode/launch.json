@@ -11,7 +11,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${fileDirname}",
-            "args": ["-s", "madrid",":update"]
+            "args": ["-c","config.yml","-s", "madrid",":update"]
         }
     ]
 }

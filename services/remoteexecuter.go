@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -12,19 +11,19 @@ import (
 )
 
 type RemoteExecutor struct {
-	Config *models.Config
+	config *models.Config
 }
 
-type RemoteOutput struct {
-	Data []byte
+func NewRemoteExecutor(config *models.Config) *RemoteExecutor {
+	return &RemoteExecutor{config: config}
 }
 
-func (r *RemoteExecutor) ExecuteCommand(server string, args []string) (*RemoteOutput, error) {
-	if r.Config == nil {
+func (r *RemoteExecutor) ExecuteCommand(server string, args []string) (*models.RemoteOutput, error) {
+	if r.config == nil {
 		errors.New("Config not initiated")
 	}
 
-	vserver, ok := r.Config.Server[server]
+	vserver, ok := r.config.Server[server]
 	if !ok {
 		errors.New("Server not found , update config")
 	}
@@ -49,7 +48,7 @@ func (r *RemoteExecutor) ExecuteCommand(server string, args []string) (*RemoteOu
 	if len(args) > 0 && strings.HasPrefix(args[0], ":") {
 		prefix := args[0]
 		template := prefix[1:]
-		parser := CommandParser{config: r.Config}
+		parser := NewCommandParser(r.config)
 		subArgs := args[1:]
 		cmd, err = parser.ParseCommand(template, subArgs)
 
@@ -67,21 +66,23 @@ func (r *RemoteExecutor) ExecuteCommand(server string, args []string) (*RemoteOu
 		return nil, err
 	}
 
-	rout := RemoteOutput{Data: out}
+	rout := models.RemoteOutput{Data: out, Server: server}
 
 	return &rout, nil
 }
 
-func (r *RemoteExecutor) MultiExec(group string, args []string) error {
+func (r *RemoteExecutor) MultiExec(group string, args []string) (*[]models.RemoteOutput, error) {
 
-	c := make(chan *RemoteOutput)
+	var output []models.RemoteOutput
+
+	c := make(chan *models.RemoteOutput)
 
 	spawns := 0
 
-	glist, ok := r.Config.Groups[group]
+	glist, ok := r.config.Groups[group]
 
 	if !ok {
-		return errors.New("Group not found")
+		return nil, errors.New("Group not found")
 	}
 
 	for _, element := range glist {
@@ -103,12 +104,12 @@ func (r *RemoteExecutor) MultiExec(group string, args []string) error {
 	for i := 0; i < spawns; i++ {
 		data := <-c
 		if data != nil {
-			fmt.Print(string(data.Data))
+			output = append(output, *data)
 		}
 
 	}
 
-	return nil
+	return &output, nil
 
 }
 

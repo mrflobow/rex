@@ -5,17 +5,33 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/mrflobow/rex/models"
 	"github.com/mrflobow/rex/services"
 )
 
 func main() {
+
+	var config *models.Config
+	var err error
+
 	serverNamePtr := flag.String("s", "", "Server to use")
 	grpNamePtr := flag.String("g", "", "Group to use")
+	configFilePtr := flag.String("c", "", "Config file to load, default is <USERHOME>/.rex/config.yml")
 	flag.Parse()
 
-	log.Println("Remote Execution Automator")
+	log.Println("REX v0.1")
+
 	configLoader := services.ConfigLoader{}
-	config, err := configLoader.LoadConfig("config.yml")
+
+	if *configFilePtr != "" {
+		if config, err = configLoader.LoadConfig(*configFilePtr); err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		if config, err = configLoader.LoadDefault(); err != nil {
+			log.Fatal(err)
+		}
+	}
 
 	if err != nil {
 		log.Fatal(err)
@@ -27,7 +43,7 @@ func main() {
 		log.Fatal("Please choose either server (-s) or Group (-g) option")
 	}
 
-	exec := services.RemoteExecutor{Config: config}
+	exec := services.NewRemoteExecutor(config)
 
 	if *serverNamePtr != "" {
 
@@ -42,7 +58,16 @@ func main() {
 	}
 
 	if *grpNamePtr != "" {
-		exec.MultiExec(*grpNamePtr, flag.Args())
+		out, err := exec.MultiExec(*grpNamePtr, flag.Args())
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for _, result := range *out {
+			fmt.Printf("Server: %v\nOutput:\n%v\n", result.Server, string(result.Data))
+		}
+
 	}
 
 }

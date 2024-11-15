@@ -8,7 +8,7 @@ import (
 
 func loadConfig(t *testing.T) (*models.Config, error) {
 	c := ConfigLoader{}
-	config, err := c.LoadConfig("../testdata/config.yml")
+	config, err := c.LoadConfig("../testdata/config_sample.yml")
 
 	if err != nil {
 		t.Fatal("Cannot load config")

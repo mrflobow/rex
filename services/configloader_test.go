@@ -22,18 +22,18 @@ func TestConfigNotFound(t *testing.T) {
 
 func TestConfigLoad(t *testing.T) {
 	cl := ConfigLoader{}
-	config, err := cl.LoadConfig("../testdata/config.yml")
+	config, err := cl.LoadConfig("../testdata/config_sample.yml")
 
-	hostCheck := "192.168.178.10"
+	hostCheck := "testhost"
 
 	if err != nil {
 		t.Fatal("Config not found")
 	}
 
-	server, ok := config.Server["tokio"]
+	server, ok := config.Server["test1"]
 
 	if !ok {
-		t.Fatalf("Key was not found %v", "tokio")
+		t.Fatalf("Key was not found %v", "test1")
 	}
 
 	if server.Host != hostCheck {

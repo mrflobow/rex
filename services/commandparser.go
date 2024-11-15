@@ -12,6 +12,10 @@ type CommandParser struct {
 	config *models.Config
 }
 
+func NewCommandParser(config *models.Config) *CommandParser {
+	return &CommandParser{config: config}
+}
+
 func (c *CommandParser) ParseCommand(template string, args []string) (string, error) {
 	if c.config == nil {
 		return "", errors.New("Config not initialized")
