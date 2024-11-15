@@ -77,3 +77,12 @@ templates:
     cmd: echo "hello ${{0}} ${{1}} world"
 ```
 
+## Known Errors
+
+````
+2024/11/15 09:38:09 ssh: handshake failed: knownhosts: key is unknown
+````
+
+Solution:
+
+Connect with your ssh client one time to the configured host to add the host key to the .ssh/known_hosts file.
