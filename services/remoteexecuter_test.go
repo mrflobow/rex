@@ -24,6 +24,11 @@ func TestConnectionFailed(t *testing.T) {
 }
 
 func TestSingleCommandExec(t *testing.T) {
+
+	if testing.Short() {
+		t.Skip("Skip test in short mode")
+	}
+
 	var load ConfigLoader
 	config, err := load.LoadConfig("../testdata/config.yml")
 
